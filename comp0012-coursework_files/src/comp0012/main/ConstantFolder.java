@@ -41,11 +41,20 @@ public class ConstantFolder
 	public void optimize()
 	{
 		ClassGen cgen = new ClassGen(original);
-		ConstantPoolGen cpgen = cgen.getConstantPool();
+
+		ConstantPoolGen constPoolGen = cgen.getConstantPool();
+		Method[] methods = cgen.getMethods();
+		for (Method method : methods) {
+			MethodGen methodGen = new MethodGen(method, cgen.getClassName(), constPoolGen);
+			System.out.println(cgen.getClassName() + " > " + method.getName());
+			System.out.println(methodGen.getInstructionList());
+			System.out.println("this is just a test");
+		}
+		this.optimized = gen.getJavaClass();
 
 		// Implement your optimization here
         
-		this.optimized = gen.getJavaClass();
+		//this.optimized = gen.getJavaClass();
 	}
 
 	
