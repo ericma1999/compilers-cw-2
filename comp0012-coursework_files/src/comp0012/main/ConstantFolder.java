@@ -46,7 +46,7 @@ public class ConstantFolder
 		Method[] methods = cgen.getMethods();
 		for (Method method : methods) {
 			MethodGen methodGen = new MethodGen(method, cgen.getClassName(), constPoolGen);
-			System.out.println(cgen.getClassName() + " > " + method.getName());
+			System.out.println(cgen.getClassName() + " --------- " + method.getName());
 			System.out.println(methodGen.getInstructionList());
 			System.out.println("this is just a test");
 		}
