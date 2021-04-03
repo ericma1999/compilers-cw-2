@@ -10,6 +10,7 @@ import org.apache.bcel.classfile.Code;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ClassGen;
+import org.apache.bcel.generic.RETURN;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InstructionList;
@@ -47,10 +48,23 @@ public class ConstantFolder
 		for (Method method : methods) {
 			MethodGen methodGen = new MethodGen(method, cgen.getClassName(), constPoolGen);
 			System.out.println(cgen.getClassName() + " --------- " + method.getName());
-			System.out.println(methodGen.getInstructionList());
-			System.out.println("this is just a test");
+
+			InstructionList test = new InstructionList(method.getCode().getCode());
+			test.insert(new RETURN());
+
+			test.insert(new RETURN());
+
+			// methodGen.setInstructionList(test);
+
+			// System.out.println(methodGen.getInstructionList());
+
+			methodGen.setInstructionList(new InstructionList());
+
+			method = methodGen.getMethod();
+			
 		}
-		this.optimized = gen.getJavaClass();
+		cgen.setMethods(methods);
+		this.optimized = cgen.getJavaClass();
 
 		// Implement your optimization here
         
