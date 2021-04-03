@@ -10,6 +10,7 @@ import org.apache.bcel.classfile.Code;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.generic.ClassGen;
+import org.apache.bcel.generic.LCONST;
 import org.apache.bcel.generic.RETURN;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.InstructionHandle;
@@ -44,26 +45,19 @@ public class ConstantFolder
 		ClassGen cgen = new ClassGen(original);
 
 		ConstantPoolGen constPoolGen = cgen.getConstantPool();
-		Method[] methods = cgen.getMethods();
-		for (Method method : methods) {
-			MethodGen methodGen = new MethodGen(method, cgen.getClassName(), constPoolGen);
-			System.out.println(cgen.getClassName() + " --------- " + method.getName());
+		Method[] methodList = cgen.getMethods();
+		for (int i = 0; i< methodList.length; i++) {
+			MethodGen methodGen = new MethodGen(methodList[i], cgen.getClassName(), constPoolGen);
+			System.out.println(cgen.getClassName() + " --------- " + methodList[i].getName());
 
-			InstructionList test = new InstructionList(method.getCode().getCode());
-			test.insert(new RETURN());
+			InstructionList test = new InstructionList(methodList[i].getCode().getCode());
+			test.insert(new LCONST(1));
 
-			test.insert(new RETURN());
+			methodGen.setInstructionList(test);
 
-			// methodGen.setInstructionList(test);
-
-			// System.out.println(methodGen.getInstructionList());
-
-			methodGen.setInstructionList(new InstructionList());
-
-			method = methodGen.getMethod();
+			cgen.replaceMethod(methodList[i], methodGen.getMethod());
 			
 		}
-		cgen.setMethods(methods);
 		this.optimized = cgen.getJavaClass();
 
 		// Implement your optimization here
