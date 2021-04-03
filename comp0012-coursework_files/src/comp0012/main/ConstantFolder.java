@@ -13,6 +13,7 @@ import org.apache.bcel.generic.ClassGen;
 import org.apache.bcel.generic.ConstantPoolGen;
 import org.apache.bcel.generic.InstructionHandle;
 import org.apache.bcel.generic.InstructionList;
+import org.apache.bcel.generic.RETURN;
 import org.apache.bcel.util.InstructionFinder;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.TargetLostException;
@@ -40,16 +41,32 @@ public class ConstantFolder
 	
 	public void optimize()
 	{
-		ClassGen cgen = new ClassGen(original);
+		ClassGen gen = new ClassGen(original);
 
-		ConstantPoolGen constPoolGen = cgen.getConstantPool();
-		Method[] methods = cgen.getMethods();
-		for (Method method : methods) {
-			MethodGen methodGen = new MethodGen(method, cgen.getClassName(), constPoolGen);
-			System.out.println(cgen.getClassName() + " --------- " + method.getName());
-			System.out.println(methodGen.getInstructionList());
-			System.out.println("this is just a test");
+		ConstantPoolGen constPoolGen = gen.getConstantPool();
+		Method[] methodsList = gen.getMethods();
+
+
+		for (int i = 0; i < methodsList.length; i++){
+			MethodGen methodGen = new MethodGen(methodsList[i], gen.getClassName(), constPoolGen);
+			// System.out.println(cgen.getClassName() + " --------- " + method.getName());
+			// System.out.println(methodGen.getInstructionList());
+			// InstructionList instructionList = methodGen.getInstructionList();
+			// instructionList.insert(new RETURN());
+			// methodGen.setInstructionList(instructionList);
+			// methodsList[i] = methodGen.getMethod();
+
+			// MethodGen test = new MethodGen(methodsList[i], gen.getClassName(), constPoolGen);
+
+			// System.out.println(test.getInstructionList());	
 		}
+
+
+		// for (Method method : methodsList) {
+			
+	
+		// }
+		// gen.setMethods(methodsList);
 		this.optimized = gen.getJavaClass();
 
 		// Implement your optimization here
