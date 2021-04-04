@@ -3,33 +3,23 @@ Tests run: 4, Failures: 0, Errors: 4, Skipped: 0, Time elapsed: 0.014 sec
 
 Testcase: testMethodThree took 0.001 sec
 	Caused an ERROR
-Operand stack overflow
+Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
-java.lang.VerifyError: Operand stack overflow
+java.lang.VerifyError: Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
 	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
@@ -40,33 +30,23 @@ Exception Details:
 
 Testcase: testMethodFour took 0 sec
 	Caused an ERROR
-Operand stack overflow
+Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
-java.lang.VerifyError: Operand stack overflow
+java.lang.VerifyError: Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
 	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
@@ -77,33 +57,23 @@ Exception Details:
 
 Testcase: testMethodOne took 0 sec
 	Caused an ERROR
-Operand stack overflow
+Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
-java.lang.VerifyError: Operand stack overflow
+java.lang.VerifyError: Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
 	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
@@ -112,35 +82,25 @@ Exception Details:
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
 
-Testcase: testMethodTwo took 0.001 sec
+Testcase: testMethodTwo took 0 sec
 	Caused an ERROR
-Operand stack overflow
+Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
-java.lang.VerifyError: Operand stack overflow
+java.lang.VerifyError: Constructor must call super() or this() before return
 Exception Details:
   Location:
-    comp0012/target/ConstantVariableFolding.<init>()V @0: lconst_1
+    comp0012/target/ConstantVariableFolding.<init>()V @0: return
   Reason:
-    Exceeded max stack size.
-  Current Frame:
-    bci: @0
-    flags: { flagThisUninit }
-    locals: { uninitializedThis }
-    stack: { }
+    Error exists in the bytecode
   Bytecode:
-    0000000: 0a2a b700 01b1                         
+    0000000: b12a b700 01b1                         
 
 	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)

@@ -39,6 +39,27 @@ public class ConstantFolder
 			e.printStackTrace();
 		}
 	}
+
+
+
+	public void simpleFolding(){
+
+	}
+
+
+
+
+	private void optimiseMethod(ClassGen cgen, Method currentMethod, ConstantPoolGen constPoolGen){
+		MethodGen methodGen = new MethodGen(currentMethod, cgen.getClassName(), constPoolGen);
+		Code currentCode = currentMethod.getCode();
+		InstructionList test = new InstructionList(currentCode.getCode());
+		test.insert(new RETURN());
+		methodGen.setInstructionList(test);
+		cgen.replaceMethod(currentMethod, methodGen.getMethod());
+
+	}
+
+
 	
 	public void optimize()
 	{
@@ -47,15 +68,17 @@ public class ConstantFolder
 		ConstantPoolGen constPoolGen = cgen.getConstantPool();
 		Method[] methodList = cgen.getMethods();
 		for (int i = 0; i< methodList.length; i++) {
-			MethodGen methodGen = new MethodGen(methodList[i], cgen.getClassName(), constPoolGen);
-			System.out.println(cgen.getClassName() + " --------- " + methodList[i].getName());
 
-			InstructionList test = new InstructionList(methodList[i].getCode().getCode());
-			test.insert(new LCONST(1));
+			optimiseMethod(cgen, methodList[i], constPoolGen);
 
-			methodGen.setInstructionList(test);
+			// MethodGen methodGen = new MethodGen(methodList[i], cgen.getClassName(), constPoolGen);
+			// System.out.println(cgen.getClassName() + " --------- " + methodList[i].getName());
 
-			cgen.replaceMethod(methodList[i], methodGen.getMethod());
+			// InstructionList test = new InstructionList(methodList[i].getCode().getCode());
+
+			// methodGen.setInstructionList(test);
+
+			// cgen.replaceMethod(methodList[i], methodGen.getMethod());
 			
 		}
 		this.optimized = cgen.getJavaClass();
