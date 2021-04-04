@@ -2,19 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2c4424b5-5721-4cd0-976e-9a20aab5f31f" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/comp0012/main/ConstantFolder.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/comp0012/main/ConstantFolder.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/test/comp0012/target/SimpleFoldingTest.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/optimised/classes/comp0012/target/ConstantVariableFolding.class" beforeDir="false" afterPath="$PROJECT_DIR$/optimised/classes/comp0012/target/ConstantVariableFolding.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/optimised/classes/comp0012/target/DynamicVariableFolding.class" beforeDir="false" afterPath="$PROJECT_DIR$/optimised/classes/comp0012/target/DynamicVariableFolding.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/optimised/classes/comp0012/target/SimpleFolding.class" beforeDir="false" afterPath="$PROJECT_DIR$/optimised/classes/comp0012/target/SimpleFolding.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/comp0012/main/ConstantFolder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/comp0012/main/ConstantFolder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/test-reports/optimised/TEST-comp0012.target.ConstantVariableFoldingTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test-reports/optimised/TEST-comp0012.target.ConstantVariableFoldingTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-reports/optimised/TEST-comp0012.target.SimpleFoldingTest.txt" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/test-reports/original/TEST-comp0012.target.ConstantVariableFoldingTest.txt" beforeDir="false" afterPath="$PROJECT_DIR$/test-reports/original/TEST-comp0012.target.ConstantVariableFoldingTest.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test-reports/original/TEST-comp0012.target.SimpleFoldingTest.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +62,7 @@
     <property name="aspect.path.notification.shown" value="true" />
     <property name="dynamic.classpath" value="false" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/lib/args4j-2.0.21.jar!/" />
+    <property name="nodejs_package_manager_path" value="npm" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -233,6 +229,7 @@
       <option name="presentableId" value="Default" />
       <updated>1425475779023</updated>
       <workItem from="1617444894757" duration="57000" />
+      <workItem from="1617520179936" duration="2528000" />
     </task>
     <servers />
   </component>
@@ -246,6 +243,13 @@
     <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
       <collection />
     </option>
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="614" height="1080" key="com.intellij.byteCodeViewer.ShowByteCodeAction" timestamp="1617521499572">
+      <screen x="0" y="23" width="1920" height="1057" />
+    </state>
+    <state width="614" height="1080" key="com.intellij.byteCodeViewer.ShowByteCodeAction/0.0.1920.1080/-1920.0.1920.1080@0.0.1920.1080" timestamp="1617521215058" />
+    <state width="614" height="1080" key="com.intellij.byteCodeViewer.ShowByteCodeAction/0.23.1920.1057/-1920.23.1920.1057@0.23.1920.1057" timestamp="1617521499572" />
   </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />

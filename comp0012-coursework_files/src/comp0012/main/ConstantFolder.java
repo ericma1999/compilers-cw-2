@@ -9,12 +9,14 @@ import org.apache.bcel.classfile.ClassParser;
 import org.apache.bcel.classfile.Code;
 import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
-import org.apache.bcel.generic.ClassGen;
-import org.apache.bcel.generic.LCONST;
-import org.apache.bcel.generic.RETURN;
-import org.apache.bcel.generic.ConstantPoolGen;
-import org.apache.bcel.generic.InstructionHandle;
-import org.apache.bcel.generic.InstructionList;
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantLong;
+//import org.apache.bcel.generic.ClassGen;
+//import org.apache.bcel.generic.LCONST;
+//import org.apache.bcel.generic.RETURN;
+//import org.apache.bcel.generic.ConstantPoolGen;
+//import org.apache.bcel.generic.InstructionHandle;
+import org.apache.bcel.generic.*;
 import org.apache.bcel.util.InstructionFinder;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.TargetLostException;
@@ -41,9 +43,104 @@ public class ConstantFolder
 	}
 
 
+	private Number getValueFromInstruction(InstructionHandle handle, ConstantPoolGen constantPoolGen){
+			Instruction currentInstruction = handle.getInstruction();
 
-	public void simpleFolding(){
+			if (currentInstruction instanceof ConstantPushInstruction){
+				return ((ConstantPushInstruction) currentInstruction).getValue();
+			}
 
+			if (currentInstruction instanceof LDC){
+				return (Number) ((LDC) currentInstruction).getValue(constantPoolGen);
+			}
+
+			if (currentInstruction instanceof LDC2_W){
+				return (Number) ((LDC2_W) currentInstruction).getValue(constantPoolGen);	
+			}
+
+			if (currentInstruction instanceof LoadInstruction){
+				// int index = ((LoadInstruction) currentInstruction).getIndex();
+				// System.out.println("this is the index");
+				// System.out.println(index);
+				// System.out.println(currentInstruction);
+				// Constant test = constantPoolGen.getConstant(index);
+				// System.out.println(test);
+				// System.out.println(constantPoolGen.getConstant(index).getClass());
+				// if (test instanceof ConstantLong){
+				// 	System.out.println("BRUHKLJASKJSAKD");
+				// 	ConstantLong output = ((ConstantLong) test);
+				// 	System.out.println(output.getConstantValue(constantPoolGen.getConstantPool()));
+				// 	// System.out.println(test.getConstantValue());
+				// }
+
+
+				// return constantPoolGen.getConstant(index);
+			}
+
+
+			return null;
+
+
+	}
+
+
+
+	public InstructionList simpleFolding(InstructionList instructionList, ConstantPoolGen constantPoolGen){
+		for(InstructionHandle insturctionHandle: instructionList.getInstructionHandles()){
+			Instruction currentInstruction = insturctionHandle.getInstruction();
+
+			if (currentInstruction instanceof ArithmeticInstruction){
+
+				// the previous two values in the stack must be a value to be able to do arithmetic operation
+				InstructionHandle firstHandle = insturctionHandle.getPrev();
+				InstructionHandle secondHandle = firstHandle.getPrev();
+				
+				// System.out.println("firsthandle");
+				// System.out.println(firstHandle);
+				// System.out.println(getValueFromInstruction(firstHandle, constantPoolGen));
+
+				// System.out.println("secondhandle");
+				// System.out.println(secondHandle);
+				// System.out.println(getValueFromInstruction(secondHandle, constantPoolGen));
+
+
+
+//				System.out.println(((LDC) firstHandle.getInstruction()).getValue());
+
+
+				// if (firstHandle.getInstruction() instanceof ConstantPushInstruction){
+//					System.out.println("test");
+					// ConstantPushInstruction test = ((ConstantPushInstruction) firstHandle.getInstruction());
+					// System.out.println(firstHandle);
+					// System.out.println(test.getValue());
+//					System.out.println(((ConstantPushInstruction) firstHandle.getInstruction()).getValue(constantPoolGen));
+				// }
+
+
+				// if (firstHandle.getInstruction() instanceof LDC){
+				// 	LDC test = ((LDC) firstHandle.getInstruction());
+				// 	System.out.println("bruh");
+				// 	System.out.println(firstHandle.getInstruction());
+				// 	System.out.println(test.getValue(constantPoolGen));
+				// }
+
+
+
+//				System.out.println(((LDC) firstHandle.getInstruction()).getValue());
+//				 System.out.println(((LDC) firstHandle.getInstruction()));
+//				 System.out.println(secondHandle);
+			}
+
+
+
+			if (currentInstruction instanceof StoreInstruction){
+				System.out.println(currentInstruction);
+				StoreInstruction test = ((StoreInstruction) currentInstruction);
+				System.out.println(test.getIndex());
+			}
+
+		}
+		return instructionList;
 	}
 
 
@@ -53,8 +150,8 @@ public class ConstantFolder
 		MethodGen methodGen = new MethodGen(currentMethod, cgen.getClassName(), constPoolGen);
 		Code currentCode = currentMethod.getCode();
 		InstructionList test = new InstructionList(currentCode.getCode());
-		test.insert(new RETURN());
-		methodGen.setInstructionList(test);
+
+		methodGen.setInstructionList(simpleFolding(test, constPoolGen));
 		cgen.replaceMethod(currentMethod, methodGen.getMethod());
 
 	}
