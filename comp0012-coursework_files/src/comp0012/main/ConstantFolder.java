@@ -172,7 +172,17 @@ public class ConstantFolder
 		}
 	}
 
+	/* Remove the instruction for first and second value as well as the arithmetic insturction */
+	private void removeOperands(InstructionHandle currentHandle, InstructionList instructionList){
+		
+		try{
+			instructionList.delete(currentHandle.getPrev().getPrev());
+			instructionList.delete(currentHandle.getPrev());
+			instructionList.delete(currentHandle);
+		}catch(TargetLostException e){
 
+		}
+	}
 
 	private void calculateArithmetic(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen, InstructionList instructionList){
 			InstructionHandle firstHandle = currentHandle.getPrev();
@@ -204,6 +214,8 @@ public class ConstantFolder
 					performDivisionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
 					break;
 			}
+
+			removeOperands(currentHandle, instructionList);
 							
 			// System.out.println("firsthandle");
 			// System.out.println(getValueFromInstruction(firstHandle, constantPoolGen));
