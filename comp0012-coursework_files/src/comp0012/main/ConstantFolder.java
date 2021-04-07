@@ -11,6 +11,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.ConstantLong;
+import org.apache.bcel.generic.LoadInstruction;
 //import org.apache.bcel.generic.ClassGen;
 //import org.apache.bcel.generic.LCONST;
 //import org.apache.bcel.generic.RETURN;
@@ -20,6 +21,7 @@ import org.apache.bcel.generic.*;
 import org.apache.bcel.util.InstructionFinder;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.TargetLostException;
+import java.util.HashMap;
 
 
 
@@ -30,6 +32,8 @@ public class ConstantFolder
 
 	JavaClass original = null;
 	JavaClass optimized = null;
+
+	HashMap <Integer, Number> storeDictionary = new HashMap();
 
 	public ConstantFolder(String classFilePath)
 	{
@@ -59,92 +63,192 @@ public class ConstantFolder
 			}
 
 			if (currentInstruction instanceof LoadInstruction){
-				// int index = ((LoadInstruction) currentInstruction).getIndex();
-				// System.out.println("this is the index");
-				// System.out.println(index);
-				// System.out.println(currentInstruction);
-				// Constant test = constantPoolGen.getConstant(index);
-				// System.out.println(test);
-				// System.out.println(constantPoolGen.getConstant(index).getClass());
-				// if (test instanceof ConstantLong){
-				// 	System.out.println("BRUHKLJASKJSAKD");
-				// 	ConstantLong output = ((ConstantLong) test);
-				// 	System.out.println(output.getConstantValue(constantPoolGen.getConstantPool()));
-				// 	// System.out.println(test.getConstantValue());
-				// }
 
+				int index = ((LoadInstruction) currentInstruction).getIndex();
+				
+				Constant test = constantPoolGen.getConstant(index);
+				return this.storeDictionary.get(index);
+				// System.out.println(constantPoolGen.getConstant(index));
 
-				// return constantPoolGen.getConstant(index);
 			}
 
-
 			return null;
+	}
 
+	// private String getArithmeticType
 
+	private String getOperationType(InstructionHandle instructionHandle, ConstantPoolGen constantPoolGen){
+		return ((ArithmeticInstruction) instructionHandle.getInstruction()).getType(constantPoolGen).toString();
+	}
+
+	private String getArithmeticOperationType(InstructionHandle instructionHandle){
+		Instruction instruction = instructionHandle.getInstruction();
+
+		if (instruction instanceof IADD || instruction instanceof LADD || instruction instanceof DADD || instruction instanceof FADD){
+			return "add";
+		}
+
+		if (instruction instanceof IMUL || instruction instanceof LMUL || instruction instanceof DMUL || instruction instanceof FMUL){
+			return "mul";
+		}
+
+		if (instruction instanceof IDIV || instruction instanceof LDIV || instruction instanceof DDIV || instruction instanceof FDIV){
+			return "div";
+		}
+
+		if (instruction instanceof ISUB || instruction instanceof LSUB || instruction instanceof DSUB || instruction instanceof FSUB){
+			return "sub";
+		}
+
+		return null;
+
+	}
+
+	private void performAdditionAction(Number firstValue, Number secondValue, String operationType, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+		switch (operationType){
+			case "int":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) firstValue + (int) secondValue)));
+				break;
+			case "long":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addLong((long) firstValue + (long) secondValue)));
+				break;
+			case "double":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addDouble((double) firstValue + (double) secondValue)));
+				break;
+			case "float":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addFloat((float) firstValue + (float) secondValue)));
+				break;
+		}
+	}
+
+	private void performDivisionAction(Number firstValue, Number secondValue, String operationType, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+		switch (operationType){
+			case "int":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) firstValue / (int) secondValue)));
+				break;
+			case "long":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addLong((long) firstValue / (long) secondValue)));
+				break;
+			case "double":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addDouble((double) firstValue / (double) secondValue)));
+				break;
+			case "float":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addFloat((float) firstValue / (float) secondValue)));
+				break;
+		}
+	}
+
+	private void performMultiplicationAction(Number firstValue, Number secondValue, String operationType, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+		switch (operationType){
+			case "int":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) firstValue * (int) secondValue)));
+				break;
+			case "long":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addLong((long) firstValue * (long) secondValue)));
+				break;
+			case "double":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addDouble((double) firstValue * (double) secondValue)));
+				break;
+			case "float":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addFloat((float) firstValue * (float) secondValue)));
+				break;
+		}
+	}
+
+	private void performSubtractionAction(Number firstValue, Number secondValue, String operationType, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+		switch (operationType){
+			case "int":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) firstValue - (int) secondValue)));
+				break;
+			case "long":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addLong((long) firstValue - (long) secondValue)));
+				break;
+			case "double":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addDouble((double) firstValue - (double) secondValue)));
+				break;
+			case "float":
+				instructionList.append(currentHandle, new LDC(constantPoolGen.addFloat((float) firstValue - (float) secondValue)));
+				break;
+		}
 	}
 
 
 
+	private void calculateArithmetic(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen, InstructionList instructionList){
+			InstructionHandle firstHandle = currentHandle.getPrev();
+			InstructionHandle secondHandle = firstHandle.getPrev();
+			Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
+			Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
+			if (firstValue == null || secondValue == null){
+				System.out.println(firstHandle);
+				System.out.println(secondHandle);
+				System.out.println("value is none");
+				return;
+			}
+
+			String operationType = getOperationType(currentHandle, constantPoolGen);
+
+			String arithmeticOperationType = getArithmeticOperationType(currentHandle);
+
+			switch(arithmeticOperationType){
+				case "add":
+					performAdditionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					break;
+				case "sub":
+					performSubtractionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					break;
+				case "mul":
+					performMultiplicationAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					break;
+				case "div":
+					performDivisionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					break;
+			}
+							
+			// System.out.println("firsthandle");
+			// System.out.println(getValueFromInstruction(firstHandle, constantPoolGen));
+
+			// System.out.println("secondhandle");
+			// System.out.println(getValueFromInstruction(secondHandle, constantPoolGen));
+
+			// System.out.println(arithmeticOperationType);
+			// System.out.println();
+			// System.out.println();
+			// System.out.println();
+	}
+
 	public InstructionList simpleFolding(InstructionList instructionList, ConstantPoolGen constantPoolGen){
-		for(InstructionHandle insturctionHandle: instructionList.getInstructionHandles()){
-			Instruction currentInstruction = insturctionHandle.getInstruction();
+		for(InstructionHandle instructionHandle: instructionList.getInstructionHandles()){
+			Instruction currentInstruction = instructionHandle.getInstruction();
+			InstructionHandle nextInstructionHandle = instructionHandle.getNext();
+			Instruction nextInstruction = null;
+
+			if (nextInstructionHandle != null){
+				nextInstruction = nextInstructionHandle.getInstruction();
+			}
+
 
 			if (currentInstruction instanceof ArithmeticInstruction){
 
 				// the previous two values in the stack must be a value to be able to do arithmetic operation
-				InstructionHandle firstHandle = insturctionHandle.getPrev();
-				InstructionHandle secondHandle = firstHandle.getPrev();
-				
-				// System.out.println("firsthandle");
-				// System.out.println(firstHandle);
-				// System.out.println(getValueFromInstruction(firstHandle, constantPoolGen));
+				// InstructionHandle firstHandle = instructionHandle.getPrev();
+				// InstructionHandle secondHandle = firstHandle.getPrev();
 
-				// System.out.println("secondhandle");
-				// System.out.println(secondHandle);
-				// System.out.println(getValueFromInstruction(secondHandle, constantPoolGen));
+				calculateArithmetic(instructionHandle, constantPoolGen, instructionList);
 
-
-
-//				System.out.println(((LDC) firstHandle.getInstruction()).getValue());
-
-
-				// if (firstHandle.getInstruction() instanceof ConstantPushInstruction){
-//					System.out.println("test");
-					// ConstantPushInstruction test = ((ConstantPushInstruction) firstHandle.getInstruction());
-					// System.out.println(firstHandle);
-					// System.out.println(test.getValue());
-//					System.out.println(((ConstantPushInstruction) firstHandle.getInstruction()).getValue(constantPoolGen));
-				// }
-
-
-				// if (firstHandle.getInstruction() instanceof LDC){
-				// 	LDC test = ((LDC) firstHandle.getInstruction());
-				// 	System.out.println("bruh");
-				// 	System.out.println(firstHandle.getInstruction());
-				// 	System.out.println(test.getValue(constantPoolGen));
-				// }
-
-
-
-//				System.out.println(((LDC) firstHandle.getInstruction()).getValue());
-//				 System.out.println(((LDC) firstHandle.getInstruction()));
-//				 System.out.println(secondHandle);
 			}
 
+			if (nextInstruction != null && nextInstruction instanceof StoreInstruction){
+				int variablePosition = ((StoreInstruction) nextInstruction).getIndex();
+				Number value = getValueFromInstruction(instructionHandle, constantPoolGen);
+				System.out.println(value);
+				this.storeDictionary.put(variablePosition, value);
 
-
-			if (currentInstruction instanceof StoreInstruction){
-				System.out.println(currentInstruction);
-				StoreInstruction test = ((StoreInstruction) currentInstruction);
-				System.out.println(test.getIndex());
 			}
 
 		}
 		return instructionList;
 	}
-
-
-
 
 	private void optimiseMethod(ClassGen cgen, Method currentMethod, ConstantPoolGen constPoolGen){
 		MethodGen methodGen = new MethodGen(currentMethod, cgen.getClassName(), constPoolGen);
@@ -163,10 +267,15 @@ public class ConstantFolder
 		ClassGen cgen = new ClassGen(original);
 
 		ConstantPoolGen constPoolGen = cgen.getConstantPool();
+
+
+
 		Method[] methodList = cgen.getMethods();
 		for (int i = 0; i< methodList.length; i++) {
 
 			optimiseMethod(cgen, methodList[i], constPoolGen);
+			// reset the constant dictionary
+			this.storeDictionary = new HashMap();
 
 			// MethodGen methodGen = new MethodGen(methodList[i], cgen.getClassName(), constPoolGen);
 			// System.out.println(cgen.getClassName() + " --------- " + methodList[i].getName());
