@@ -1,5 +1,5 @@
 Testsuite: comp0012.target.ConstantVariableFoldingTest
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.011 sec
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.013 sec
 
 Testcase: initializationError took 0.001 sec
 	Caused an ERROR

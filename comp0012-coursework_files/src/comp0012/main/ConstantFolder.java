@@ -208,35 +208,38 @@ public class ConstantFolder
 		}
 	}
 
-	private void calculateArithmetic(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen, InstructionList instructionList){
-			InstructionHandle firstHandle = currentHandle.getPrev();
-			InstructionHandle secondHandle = firstHandle.getPrev();
+	private Number calculateArithmetic(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen, InstructionList instructionList){
+			InstructionHandle firstHandle = currentHandle.getPrev().getPrev();
+			InstructionHandle secondHandle = currentHandle.getPrev();
 			Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
 			Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
 			if (firstValue == null || secondValue == null){
-				return;
+				return null;
 			}
 
 			String operationType = getOperationType(currentHandle, constantPoolGen);
 
 			String arithmeticOperationType = getArithmeticOperationType(currentHandle);
 
+			Number arithmeticResult = null;
+
 			switch(arithmeticOperationType){
 				case "add":
-					performAdditionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					arithmeticResult = performAdditionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
 					break;
 				case "sub":
-					performSubtractionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					arithmeticResult = performSubtractionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
 					break;
 				case "mul":
-					performMultiplicationAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					arithmeticResult = performMultiplicationAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
 					break;
 				case "div":
-					performDivisionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
+					arithmeticResult = performDivisionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
 					break;
 			}
 
 			removeOperands(currentHandle, instructionList);
+			return arithmeticResult;
 	}
 
 	public InstructionList simpleFolding(InstructionList instructionList, ConstantPoolGen constantPoolGen){
@@ -245,6 +248,8 @@ public class ConstantFolder
 			InstructionHandle nextInstructionHandle = instructionHandle.getNext();
 			Instruction nextInstruction = null;
 			boolean isArithmetic = false;
+
+			Number arithmeticResult = null;
 
 			if (nextInstructionHandle != null){
 				nextInstruction = nextInstructionHandle.getInstruction();
@@ -260,14 +265,21 @@ public class ConstantFolder
 				// InstructionHandle firstHandle = instructionHandle.getPrev();
 				// InstructionHandle secondHandle = firstHandle.getPrev();
 
-				calculateArithmetic(instructionHandle, constantPoolGen, instructionList);
+				arithmeticResult = calculateArithmetic(instructionHandle, constantPoolGen, instructionList);
+				System.out.println(arithmeticResult);
 				
 			}
 
 			if (nextInstruction != null && nextInstruction instanceof StoreInstruction){
 				int variablePosition = ((StoreInstruction) nextInstruction).getIndex();
-				Number value = getValueFromInstruction(instructionHandle, constantPoolGen);
-				this.storeDictionary.put(variablePosition, value);
+				if (isArithmetic && arithmeticResult != null){
+					Number value = arithmeticResult;
+					this.storeDictionary.put(variablePosition, value);
+				}else{
+					Number value = getValueFromInstruction(instructionHandle, constantPoolGen);
+					this.storeDictionary.put(variablePosition, value);
+				}
+
 			}
 
 		}
