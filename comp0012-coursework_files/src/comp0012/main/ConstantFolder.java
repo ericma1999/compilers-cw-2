@@ -252,12 +252,12 @@ public class ConstantFolder
 			Number arithmeticResult = null;
 
 			if (currentInstruction instanceof ConversionInstruction){
+				// skip conversion step since we can conver the value to our desired type
 				try{
 					instructionList.delete(currentInstruction);
 				}catch (Exception e){
 
 				}
-
 				continue;
 			}
 
