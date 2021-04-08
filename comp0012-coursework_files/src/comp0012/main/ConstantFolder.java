@@ -109,19 +109,19 @@ public class ConstantFolder
 		switch (operationType){
 			case "int":
 				result = (int) firstValue + (int) secondValue;
-				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
+				instructionList.insert(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
 				result = (long) firstValue + (long) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
 				result = (double) firstValue + (double) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
 				result = (float) firstValue + (float) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
 		return result;
@@ -132,19 +132,19 @@ public class ConstantFolder
 		switch (operationType){
 			case "int":
 				result = (int) firstValue / (int) secondValue;
-				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
+				instructionList.insert(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
 				result = (long) firstValue / (long) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
 				result = (double) firstValue / (double) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
 				result = (float) firstValue / (float) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
 		return result;
@@ -155,19 +155,19 @@ public class ConstantFolder
 		switch (operationType){
 			case "int":
 				result = (int) firstValue * (int) secondValue;
-				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
+				instructionList.insert(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
 				result = (long) firstValue * (long) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
 				result = (double) firstValue * (double) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
 				result = (float) firstValue * (float) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
 		return result;
@@ -178,19 +178,19 @@ public class ConstantFolder
 		switch (operationType){
 			case "int":
 				result = (int) firstValue - (int) secondValue;
-				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
+				instructionList.insert(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
 				result = (long) firstValue - (long) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
 				result = (double) firstValue - (double) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
 				result = (float) firstValue - (float) secondValue;
-				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
+				instructionList.insert(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
 		return result;
@@ -200,11 +200,22 @@ public class ConstantFolder
 	private void removeOperands(InstructionHandle currentHandle, InstructionList instructionList){
 		
 		try{
-			instructionList.delete(currentHandle.getPrev().getPrev());
-			instructionList.delete(currentHandle.getPrev());
+			System.out.println("deleting");
+			// System.out.println(currentHandle.getPrev().getPrev());
+			// instructionList.delete();
+			// instructionList.delete(currentHandle.getPrev());
+			// instructionList.delete(currentHandle.getNext());
 			instructionList.delete(currentHandle);
 		}catch(TargetLostException e){
-
+			InstructionHandle[] targets = e.getTargets();
+                for(int i=0;i<targets.length;i++)
+                {
+                    InstructionTargeter[] targeters = targets[i].getTargeters();
+                    for(int j=0;j<targeters.length;j++)
+                    {
+                        targeters[j].updateTarget(targets[i],null);
+                    }
+                }
 		}
 	}
 
@@ -237,6 +248,15 @@ public class ConstantFolder
 					arithmeticResult = performDivisionAction(firstValue, secondValue, operationType, instructionList, currentHandle, constantPoolGen);
 					break;
 			}
+
+			// instructionList.delete(currentHandle.getPrev().getPrev());
+			// instructionList.delete(currentHandle.getPrev());
+
+			// try{
+			// 	instructionList.delete(firstHandle);
+			// }catch(TargetLostException e){
+			// 	System.out.println("bajsdfjas");
+			// }
 
 			removeOperands(currentHandle, instructionList);
 			return arithmeticResult;
@@ -291,7 +311,12 @@ public class ConstantFolder
 		Code currentCode = currentMethod.getCode();
 		InstructionList test = new InstructionList(currentCode.getCode());
 
+
+
 		methodGen.setInstructionList(simpleFolding(test, constPoolGen));
+
+		methodGen.setMaxStack();
+		methodGen.setMaxLocals();
 		cgen.replaceMethod(currentMethod, methodGen.getMethod());
 
 	}
