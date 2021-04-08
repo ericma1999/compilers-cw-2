@@ -24,30 +24,71 @@ import org.apache.bcel.generic.TargetLostException;
 import java.util.HashMap;
 
 
+public class SimpleFolding{
+    HashMap <Integer, Number> storeDictionary = new HashMap();
+    InstructionList instructionList;
+    ConstantPoolGen constantPoolGen;
 
-public class ConstantFolder
-{
-	ClassParser parser = null;
-	ClassGen gen = null;
+    public SimpleFolding(InstructionList instructionList, ConstantPoolGen constantPoolGen){
+        this.instructionList = instructionList;
+        this.constantPoolGen = constantPoolGen;
+    }
 
-	JavaClass original = null;
-	JavaClass optimized = null;
+    public InstructionList optimise(){
+        for(InstructionHandle instructionHandle: instructionList.getInstructionHandles()){
+			Instruction currentInstruction = instructionHandle.getInstruction();
+			InstructionHandle nextInstructionHandle = instructionHandle.getNext();
+			Instruction nextInstruction = null;
+			boolean isArithmetic = false;
 
-	HashMap <Integer, Number> storeDictionary = new HashMap();
+			Number arithmeticResult = null;
 
-	public ConstantFolder(String classFilePath)
-	{
-		try{
-			this.parser = new ClassParser(classFilePath);
-			this.original = this.parser.parse();
-			this.gen = new ClassGen(this.original);
-		} catch(IOException e){
-			e.printStackTrace();
+			if (currentInstruction instanceof ConversionInstruction){
+				// skip conversion step since we can conver the value to our desired type
+				try{
+					instructionList.delete(currentInstruction);
+				}catch (Exception e){
+
+				}
+				continue;
+			}
+
+			if (nextInstructionHandle != null){
+				nextInstruction = nextInstructionHandle.getInstruction();
+			}
+
+
+			if (currentInstruction instanceof ArithmeticInstruction){
+
+				// set this to true to load the result value into hashmap
+				isArithmetic = true;
+
+				// the previous two values in the stack must be a value to be able to do arithmetic operation
+				// InstructionHandle firstHandle = instructionHandle.getPrev();
+				// InstructionHandle secondHandle = firstHandle.getPrev();
+
+				arithmeticResult = calculateArithmetic(instructionHandle, constantPoolGen, instructionList);
+				System.out.println(arithmeticResult);
+				
+			}
+
+			if (nextInstruction != null && nextInstruction instanceof StoreInstruction){
+				int variablePosition = ((StoreInstruction) nextInstruction).getIndex();
+				if (isArithmetic && arithmeticResult != null){
+					Number value = arithmeticResult;
+					this.storeDictionary.put(variablePosition, value);
+				}else{
+					Number value = getValueFromInstruction(instructionHandle, constantPoolGen);
+					this.storeDictionary.put(variablePosition, value);
+				}
+
+			}
+
 		}
-	}
+		return instructionList;
+    }
 
-
-	private Number getValueFromInstruction(InstructionHandle handle, ConstantPoolGen constantPoolGen){
+    private Number getValueFromInstruction(InstructionHandle handle, ConstantPoolGen constantPoolGen){
 			Instruction currentInstruction = handle.getInstruction();
 
 			if (currentInstruction instanceof ConstantPushInstruction){
@@ -242,122 +283,8 @@ public class ConstantFolder
 			return arithmeticResult;
 	}
 
-	public InstructionList simpleFolding(InstructionList instructionList, ConstantPoolGen constantPoolGen){
-		for(InstructionHandle instructionHandle: instructionList.getInstructionHandles()){
-			Instruction currentInstruction = instructionHandle.getInstruction();
-			InstructionHandle nextInstructionHandle = instructionHandle.getNext();
-			Instruction nextInstruction = null;
-			boolean isArithmetic = false;
-
-			Number arithmeticResult = null;
-
-			if (currentInstruction instanceof ConversionInstruction){
-				// skip conversion step since we can conver the value to our desired type
-				try{
-					instructionList.delete(currentInstruction);
-				}catch (Exception e){
-
-				}
-				continue;
-			}
-
-			if (nextInstructionHandle != null){
-				nextInstruction = nextInstructionHandle.getInstruction();
-			}
-
-
-			if (currentInstruction instanceof ArithmeticInstruction){
-
-				// set this to true to load the result value into hashmap
-				isArithmetic = true;
-
-				// the previous two values in the stack must be a value to be able to do arithmetic operation
-				// InstructionHandle firstHandle = instructionHandle.getPrev();
-				// InstructionHandle secondHandle = firstHandle.getPrev();
-
-				arithmeticResult = calculateArithmetic(instructionHandle, constantPoolGen, instructionList);
-				System.out.println(arithmeticResult);
-				
-			}
-
-			if (nextInstruction != null && nextInstruction instanceof StoreInstruction){
-				int variablePosition = ((StoreInstruction) nextInstruction).getIndex();
-				if (isArithmetic && arithmeticResult != null){
-					Number value = arithmeticResult;
-					this.storeDictionary.put(variablePosition, value);
-				}else{
-					Number value = getValueFromInstruction(instructionHandle, constantPoolGen);
-					this.storeDictionary.put(variablePosition, value);
-				}
-
-			}
-
-		}
-		return instructionList;
-	}
-
-	private void optimiseMethod(ClassGen cgen, Method currentMethod, ConstantPoolGen constPoolGen){
-		MethodGen methodGen = new MethodGen(currentMethod, cgen.getClassName(), constPoolGen);
-		Code currentCode = currentMethod.getCode();
-		InstructionList test = methodGen.getInstructionList(); 
-		// simpleFolding(test, constPoolGen);
-		new SimpleFolding(test, constPoolGen).optimise();
-
-		cgen.replaceMethod(currentMethod, methodGen.getMethod());
-	}
-
-
-	
-	public void optimize()
-	{
-		ClassGen cgen = new ClassGen(original);
-
-		ConstantPoolGen constPoolGen = cgen.getConstantPool();
 
 
 
-		Method[] methodList = cgen.getMethods();
-		for (int i = 0; i< methodList.length; i++) {
-			System.out.println("new method");
-			optimiseMethod(cgen, methodList[i], constPoolGen);
-			// reset the constant dictionary
-			this.storeDictionary = new HashMap();
 
-			System.out.println();
-			System.out.println();
-			System.out.println();
-
-			// MethodGen methodGen = new MethodGen(methodList[i], cgen.getClassName(), constPoolGen);
-			// System.out.println(cgen.getClassName() + " --------- " + methodList[i].getName());
-
-			// InstructionList test = new InstructionList(methodList[i].getCode().getCode());
-
-			// methodGen.setInstructionList(test);
-
-			// cgen.replaceMethod(methodList[i], methodGen.getMethod());
-			
-		}
-		this.optimized = cgen.getJavaClass();
-
-		// Implement your optimization here
-        
-		//this.optimized = gen.getJavaClass();
-	}
-
-	
-	public void write(String optimisedFilePath)
-	{
-		this.optimize();
-
-		try {
-			FileOutputStream out = new FileOutputStream(new File(optimisedFilePath));
-			this.optimized.dump(out);
-		} catch (FileNotFoundException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }
