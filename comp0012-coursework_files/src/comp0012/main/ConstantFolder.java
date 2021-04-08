@@ -108,19 +108,19 @@ public class ConstantFolder
 		Number result = null;
 		switch (operationType){
 			case "int":
-				result = (int) firstValue + (int) secondValue;
+				result = firstValue.intValue() + secondValue.intValue();
 				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
-				result = (long) firstValue + (long) secondValue;
+				result = firstValue.longValue() + secondValue.longValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
-				result = (double) firstValue + (double) secondValue;
+				result = firstValue.doubleValue() + secondValue.doubleValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
-				result = (float) firstValue + (float) secondValue;
+				result = firstValue.floatValue() + secondValue.floatValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
@@ -131,19 +131,19 @@ public class ConstantFolder
 		Number result = null;
 		switch (operationType){
 			case "int":
-				result = (int) firstValue / (int) secondValue;
+				result = firstValue.intValue() / secondValue.intValue();
 				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
-				result = (long) firstValue / (long) secondValue;
+				result = firstValue.longValue() / secondValue.longValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
-				result = (double) firstValue / (double) secondValue;
+				result = firstValue.doubleValue() / secondValue.doubleValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
-				result = (float) firstValue / (float) secondValue;
+				result = firstValue.floatValue() / secondValue.floatValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
@@ -154,19 +154,19 @@ public class ConstantFolder
 		Number result = null;
 		switch (operationType){
 			case "int":
-				result = (int) firstValue * (int) secondValue;
+				result = firstValue.intValue() * secondValue.intValue();
 				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
-				result = (long) firstValue * (long) secondValue;
+				result = firstValue.longValue() * secondValue.longValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
-				result = (double) firstValue * (double) secondValue;
+				result = firstValue.doubleValue() * secondValue.doubleValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
-				result = (float) firstValue * (float) secondValue;
+				result = firstValue.floatValue() * secondValue.floatValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
@@ -177,19 +177,19 @@ public class ConstantFolder
 		Number result = null;
 		switch (operationType){
 			case "int":
-				result = (int) firstValue - (int) secondValue;
+				result = firstValue.intValue() - secondValue.intValue();
 				instructionList.append(currentHandle, new LDC(constantPoolGen.addInteger((int) result)));
 				break;
 			case "long":
-				result = (long) firstValue - (long) secondValue;
+				result = firstValue.longValue() - secondValue.longValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addLong((long) result)));
 				break;
 			case "double":
-				result = (double) firstValue - (double) secondValue;
+				result = firstValue.doubleValue() - secondValue.doubleValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addDouble((double) result)));
 				break;
 			case "float":
-				result = (float) firstValue - (float) secondValue;
+				result = firstValue.floatValue() - secondValue.floatValue();
 				instructionList.append(currentHandle, new LDC2_W(constantPoolGen.addFloat((float) result)));
 				break;
 		}
@@ -250,6 +250,16 @@ public class ConstantFolder
 			boolean isArithmetic = false;
 
 			Number arithmeticResult = null;
+
+			if (currentInstruction instanceof ConversionInstruction){
+				try{
+					instructionList.delete(currentInstruction);
+				}catch (Exception e){
+
+				}
+
+				continue;
+			}
 
 			if (nextInstructionHandle != null){
 				nextInstruction = nextInstructionHandle.getInstruction();
