@@ -43,6 +43,19 @@ public class SimpleFolding{
 
 			Number arithmeticResult = null;
 
+
+			if (currentInstruction instanceof IfInstruction){
+				// IfInstruction test = (IfInstruction) instructionHandle.getInstruction();
+				// System.out.println(test.getName());
+				System.out.println(getOperationType(instructionHandle, constantPoolGen));
+
+				performComparator(instructionHandle, constantPoolGen);
+			}
+
+
+
+
+
 			if (currentInstruction instanceof ConversionInstruction){
 				// skip conversion step since we can conver the value to our desired type
 				try{
@@ -116,10 +129,100 @@ public class SimpleFolding{
 			return null;
 	}
 
-	// private String getArithmeticType
+	private boolean performLessEqualComparison(Number firstValue, Number secondValue){
+		return firstValue.longValue() <= secondValue.longValue();
+	}
+
+	private boolean performGreaterEqualComparison(Number firstValue, Number secondValue){
+		return firstValue.longValue() >= secondValue.longValue();
+	}
+
+	private void foldIfInstruction(boolean result, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+		if (result){
+			System.out.println(result);
+		}
+	}
+
+	private void performComparator(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+			InstructionHandle firstHandle = currentHandle.getPrev();
+			InstructionHandle secondHandle = currentHandle.getPrev().getPrev();	
+
+			Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
+			Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
+
+			String comparatorType = getOperationType(currentHandle, constantPoolGen);
+
+			boolean result = false;
+			boolean calculated = false;
+
+			switch(comparatorType){
+				case "less_equal":
+					result = performLessEqualComparison(firstValue, secondValue);
+					calculated = true;
+					break;
+				case "less_equal_zero":
+					result = performLessEqualComparison(firstValue, 0);
+					calculated = true;
+					break;
+				case "greater_equal":
+					result = performGreaterEqualComparison(firstValue, secondValue);
+					calculated = true;
+					break;
+				case "greater_equal_zero":
+					result =  performGreaterEqualComparison(firstValue, 0);
+					calculated = true;
+					break;
+			}
+
+
+			if (calculated){
+				foldIfInstruction(result, currentHandle, constantPoolGen);
+			}
+
+	}
+
+	private String getComparatortype(String type){
+		switch(type){
+			case "if_icmple":
+				return "less_equal";
+			case "ifle":
+				return "less_equal_zero";
+			case "if_icmpge":
+				return "greater_equal";
+			case "if_ge":
+				return "greater_equal_zero";
+			case "ifeq":
+				return "equal_zero";
+			case "lcmp":
+				return "lcmp"; 
+			case "ifnull":
+				return "equal_null";
+			case "ifnonnull":
+				return "not_null";
+			default:
+				return null;
+		}
+	}
 
 	private String getOperationType(InstructionHandle instructionHandle, ConstantPoolGen constantPoolGen){
-		return ((ArithmeticInstruction) instructionHandle.getInstruction()).getType(constantPoolGen).toString();
+
+		Instruction instruction = instructionHandle.getInstruction();
+
+		if (instruction instanceof ArithmeticInstruction){
+			return ((ArithmeticInstruction) instruction).getType(constantPoolGen).toString();
+		}
+
+		if (instruction instanceof IfInstruction){
+			
+			return getComparatortype(instruction.getName());
+		}
+
+		return null;
+
+
+
+
+
 	}
 
 	private String getArithmeticOperationType(InstructionHandle instructionHandle){
