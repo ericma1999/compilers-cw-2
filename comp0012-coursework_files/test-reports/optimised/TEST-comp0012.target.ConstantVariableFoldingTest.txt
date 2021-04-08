@@ -1,20 +1,138 @@
 Testsuite: comp0012.target.ConstantVariableFoldingTest
-Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.012 sec
+Tests run: 3, Failures: 0, Errors: 3, Skipped: 0, Time elapsed: 0.013 sec
 
-Testcase: initializationError took 0.001 sec
+Testcase: testMethodThree took 0.001 sec
 	Caused an ERROR
-comp0012/target/ConstantVariableFolding
-java.lang.NoClassDefFoundError: comp0012/target/ConstantVariableFolding
-	at java.base/java.lang.Class.getDeclaredFields0(Native Method)
-	at java.base/java.lang.Class.privateGetDeclaredFields(Class.java:3220)
-	at java.base/java.lang.Class.getDeclaredFields(Class.java:2341)
+StackMapTable error: bad offset
+Exception Details:
+  Location:
+    comp0012/target/ConstantVariableFolding.methodThree()Z @0: sipush
+  Reason:
+    Invalid stackmap specification.
+  Current Frame:
+    bci: @16
+    flags: { }
+    locals: { 'comp0012/target/ConstantVariableFolding', integer, integer }
+    stack: { }
+  Bytecode:
+    0000000: 1130 393c 1209 3da4 0007 04a7 0004 03ac
+    0000010:                                        
+  Stackmap Table:
+    append_frame(@16,Integer,Integer)
+    same_locals_1_stack_item_frame(@17,Integer)
+
+java.lang.VerifyError: StackMapTable error: bad offset
+Exception Details:
+  Location:
+    comp0012/target/ConstantVariableFolding.methodThree()Z @0: sipush
+  Reason:
+    Invalid stackmap specification.
+  Current Frame:
+    bci: @16
+    flags: { }
+    locals: { 'comp0012/target/ConstantVariableFolding', integer, integer }
+    stack: { }
+  Bytecode:
+    0000000: 1130 393c 1209 3da4 0007 04a7 0004 03ac
+    0000010:                                        
+  Stackmap Table:
+    append_frame(@16,Integer,Integer)
+    same_locals_1_stack_item_frame(@17,Integer)
+
+	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
 	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:64)
 	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
 	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
 	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
-Caused by: java.lang.ClassNotFoundException: comp0012.target.ConstantVariableFolding
-	at java.base/jdk.internal.loader.BuiltinClassLoader.loadClass(BuiltinClassLoader.java:606)
-	at java.base/jdk.internal.loader.ClassLoaders$AppClassLoader.loadClass(ClassLoaders.java:168)
-	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:522)
+
+Testcase: testMethodOne took 0 sec
+	Caused an ERROR
+StackMapTable error: bad offset
+Exception Details:
+  Location:
+    comp0012/target/ConstantVariableFolding.methodThree()Z @0: sipush
+  Reason:
+    Invalid stackmap specification.
+  Current Frame:
+    bci: @16
+    flags: { }
+    locals: { 'comp0012/target/ConstantVariableFolding', integer, integer }
+    stack: { }
+  Bytecode:
+    0000000: 1130 393c 1209 3da4 0007 04a7 0004 03ac
+    0000010:                                        
+  Stackmap Table:
+    append_frame(@16,Integer,Integer)
+    same_locals_1_stack_item_frame(@17,Integer)
+
+java.lang.VerifyError: StackMapTable error: bad offset
+Exception Details:
+  Location:
+    comp0012/target/ConstantVariableFolding.methodThree()Z @0: sipush
+  Reason:
+    Invalid stackmap specification.
+  Current Frame:
+    bci: @16
+    flags: { }
+    locals: { 'comp0012/target/ConstantVariableFolding', integer, integer }
+    stack: { }
+  Bytecode:
+    0000000: 1130 393c 1209 3da4 0007 04a7 0004 03ac
+    0000010:                                        
+  Stackmap Table:
+    append_frame(@16,Integer,Integer)
+    same_locals_1_stack_item_frame(@17,Integer)
+
+	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:64)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
+
+Testcase: testMethodTwo took 0 sec
+	Caused an ERROR
+StackMapTable error: bad offset
+Exception Details:
+  Location:
+    comp0012/target/ConstantVariableFolding.methodThree()Z @0: sipush
+  Reason:
+    Invalid stackmap specification.
+  Current Frame:
+    bci: @16
+    flags: { }
+    locals: { 'comp0012/target/ConstantVariableFolding', integer, integer }
+    stack: { }
+  Bytecode:
+    0000000: 1130 393c 1209 3da4 0007 04a7 0004 03ac
+    0000010:                                        
+  Stackmap Table:
+    append_frame(@16,Integer,Integer)
+    same_locals_1_stack_item_frame(@17,Integer)
+
+java.lang.VerifyError: StackMapTable error: bad offset
+Exception Details:
+  Location:
+    comp0012/target/ConstantVariableFolding.methodThree()Z @0: sipush
+  Reason:
+    Invalid stackmap specification.
+  Current Frame:
+    bci: @16
+    flags: { }
+    locals: { 'comp0012/target/ConstantVariableFolding', integer, integer }
+    stack: { }
+  Bytecode:
+    0000000: 1130 393c 1209 3da4 0007 04a7 0004 03ac
+    0000010:                                        
+  Stackmap Table:
+    append_frame(@16,Integer,Integer)
+    same_locals_1_stack_item_frame(@17,Integer)
+
+	at comp0012.target.ConstantVariableFoldingTest.<init>(Unknown Source)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:64)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:500)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:481)
 

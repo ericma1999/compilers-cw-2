@@ -301,7 +301,7 @@ public class ConstantFolder
 		Code currentCode = currentMethod.getCode();
 		InstructionList test = methodGen.getInstructionList(); 
 		// simpleFolding(test, constPoolGen);
-		new SimpleFolding(test, constPoolGen).optimise();
+		new SimpleFoldingOptimiser(test, constPoolGen).optimise();
 
 		cgen.replaceMethod(currentMethod, methodGen.getMethod());
 	}
@@ -317,8 +317,9 @@ public class ConstantFolder
 
 
 		Method[] methodList = cgen.getMethods();
+		System.out.println(cgen.getClassName());
 		for (int i = 0; i< methodList.length; i++) {
-			System.out.println("new method");
+			System.out.println(methodList[i].getName());
 			optimiseMethod(cgen, methodList[i], constPoolGen);
 			// reset the constant dictionary
 			this.storeDictionary = new HashMap();

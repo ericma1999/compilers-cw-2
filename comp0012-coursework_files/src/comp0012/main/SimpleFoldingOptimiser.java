@@ -24,12 +24,12 @@ import org.apache.bcel.generic.TargetLostException;
 import java.util.HashMap;
 
 
-public class SimpleFolding{
+public class SimpleFoldingOptimiser{
     HashMap <Integer, Number> storeDictionary = new HashMap();
     InstructionList instructionList;
     ConstantPoolGen constantPoolGen;
 
-    public SimpleFolding(InstructionList instructionList, ConstantPoolGen constantPoolGen){
+    public SimpleFoldingOptimiser(InstructionList instructionList, ConstantPoolGen constantPoolGen){
         this.instructionList = instructionList;
         this.constantPoolGen = constantPoolGen;
     }
@@ -42,6 +42,38 @@ public class SimpleFolding{
 			boolean isArithmetic = false;
 
 			Number arithmeticResult = null;
+
+			if (currentInstruction instanceof LCMP){
+
+				InstructionHandle firstHandle = instructionHandle.getPrev();
+				InstructionHandle secondHandle = instructionHandle.getPrev().getPrev();
+
+
+				Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
+				Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
+
+				int valueToPush;
+				if ((Long) firstValue > (Long) secondValue) {
+					valueToPush = 1;
+				}else if ((Long) firstValue > (Long) secondValue) {
+					valueToPush = -1;
+				} else {
+					valueToPush = 0;
+				}	
+
+				instructionHandle.setInstruction(new LDC(constantPoolGen.addInteger(valueToPush)));
+
+				try{
+					instructionList.delete(firstHandle);
+					instructionList.delete(secondHandle);
+				}catch(Exception e){
+
+				}
+
+
+
+
+			}
 
 
 			if (currentInstruction instanceof IfInstruction){
@@ -137,9 +169,20 @@ public class SimpleFolding{
 		return firstValue.longValue() >= secondValue.longValue();
 	}
 
-	private void foldIfInstruction(boolean result, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+	private void foldIfInstruction(boolean result, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
+
+		try{
+			instructionList.delete(currentHandle.getPrev());
+			instructionList.delete(currentHandle.getPrev());
+		}catch(Exception e){
+
+		}
+
+
+
+
 		if (result){
-			System.out.println(result);
+			
 		}
 	}
 
@@ -176,7 +219,7 @@ public class SimpleFolding{
 
 
 			if (calculated){
-				foldIfInstruction(result, currentHandle, constantPoolGen);
+				foldIfInstruction(result, instructionList, currentHandle, constantPoolGen);
 			}
 
 	}
@@ -193,8 +236,6 @@ public class SimpleFolding{
 				return "greater_equal_zero";
 			case "ifeq":
 				return "equal_zero";
-			case "lcmp":
-				return "lcmp"; 
 			case "ifnull":
 				return "equal_null";
 			case "ifnonnull":
