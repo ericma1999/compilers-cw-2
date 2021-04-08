@@ -289,11 +289,10 @@ public class ConstantFolder
 	private void optimiseMethod(ClassGen cgen, Method currentMethod, ConstantPoolGen constPoolGen){
 		MethodGen methodGen = new MethodGen(currentMethod, cgen.getClassName(), constPoolGen);
 		Code currentCode = currentMethod.getCode();
-		InstructionList test = new InstructionList(currentCode.getCode());
+		InstructionList test = methodGen.getInstructionList(); 
+		simpleFolding(test, constPoolGen);
 
-		methodGen.setInstructionList(simpleFolding(test, constPoolGen));
 		cgen.replaceMethod(currentMethod, methodGen.getMethod());
-
 	}
 
 
