@@ -76,13 +76,13 @@ public class SimpleFoldingOptimiser{
 			// }
 
 
-			// if (currentInstruction instanceof IfInstruction){
-			// 	// IfInstruction test = (IfInstruction) instructionHandle.getInstruction();
-			// 	// System.out.println(test.getName());
-			// 	System.out.println(getOperationType(instructionHandle, constantPoolGen));
+			if (currentInstruction instanceof IfInstruction){
+				// IfInstruction test = (IfInstruction) instructionHandle.getInstruction();
+				// System.out.println(test.getName());
+				System.out.println(getOperationType(instructionHandle, constantPoolGen));
 
-			// 	performComparator(instructionHandle, constantPoolGen);
-			// }
+				performComparator(instructionHandle, constantPoolGen);
+			}
 
 
 
@@ -172,8 +172,9 @@ public class SimpleFoldingOptimiser{
 	private void foldIfInstruction(boolean result, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
 
 		try{
+			instructionList.delete(currentHandle.getPrev().getPrev());
 			instructionList.delete(currentHandle.getPrev());
-			instructionList.delete(currentHandle.getPrev());
+			instructionList.delete(currentHandle);
 		}catch(Exception e){
 
 		}

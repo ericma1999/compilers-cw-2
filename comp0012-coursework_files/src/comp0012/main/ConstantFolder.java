@@ -338,6 +338,7 @@ public class ConstantFolder
 			// cgen.replaceMethod(methodList[i], methodGen.getMethod());
 			
 		}
+		cgen.setMajor(50);
 		this.optimized = cgen.getJavaClass();
 
 		// Implement your optimization here
