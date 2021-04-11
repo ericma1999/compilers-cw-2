@@ -11,28 +11,28 @@ import java.io.PrintStream;
 /**
  * test simple folding
  */
-// public class SimpleFoldingTest {
+public class SimpleFoldingTest {
 
-//     SimpleFolding sf = new SimpleFolding();
+    SimpleFolding sf = new SimpleFolding();
     
-//     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     
-//     @Before
-//     public void setUpStreams()
-//     {
-//         System.setOut(new PrintStream(outContent));
-//     }
+    @Before
+    public void setUpStreams()
+    {
+        System.setOut(new PrintStream(outContent));
+    }
     
-//     @After
-//     public void cleanUpStreams()
-//     {
-//         System.setOut(null);
-//     }
+    @After
+    public void cleanUpStreams()
+    {
+        System.setOut(null);
+    }
 
-//     @Test
-//     public void testSimple(){
-//         sf.simple();
-//         assertEquals("12412\n", outContent.toString());
-//     }
+    @Test
+    public void testSimple(){
+        sf.simple();
+        assertEquals("12412\n", outContent.toString());
+    }
 
-// }
+}
