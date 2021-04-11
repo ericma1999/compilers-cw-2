@@ -162,10 +162,16 @@ public class SimpleFoldingOptimiser{
 	}
 
 	private boolean performLessEqualComparison(Number firstValue, Number secondValue){
+		if (firstValue == null){
+			firstValue = 0;
+		}
 		return firstValue.longValue() <= secondValue.longValue();
 	}
 
 	private boolean performGreaterEqualComparison(Number firstValue, Number secondValue){
+		if (firstValue == null){
+			firstValue = 0;
+		}
 		return firstValue.longValue() >= secondValue.longValue();
 	}
 
@@ -182,24 +188,26 @@ public class SimpleFoldingOptimiser{
 		}
 
 		if (result){
-
 			// traverse through the instruction to the next goto, delete from goto to goto's target.getPrev()
-			// InstructionHandle gotoInstructionHandle = currentHandle; 
-			// while(true){
-			// 	if (gotoInstructionHandle.getInstruction() instanceof GotoInstruction){
-			// 		break;
-			// 	}else{
-			// 		gotoInstructionHandle = gotoInstructionHandle.getNext();
-			// 	}
-			// }
+			InstructionHandle gotoInstructionHandle = currentHandle.getNext(); 
+			while(true){
+				if (gotoInstructionHandle.getInstruction() instanceof GotoInstruction){
+					break;
+				}else{
+					gotoInstructionHandle = gotoInstructionHandle.getNext();
+				}
+			}
 
-			// InstructionHandle deleteTarget = ((GotoInstruction) gotoInstructionHandle.getInstruction()).getTarget().getPrev();
+			
 
-			// try {
-			// 	instructionList.delete(gotoInstructionHandle, deleteTarget);
-			// }catch(Exception e){
+			InstructionHandle deleteTarget = ((GotoInstruction) gotoInstructionHandle.getInstruction()).getTarget().getPrev();
+
+			try {
+				instructionList.delete(currentHandle);
+				instructionList.delete(gotoInstructionHandle, deleteTarget);
+			}catch(Exception e){
 				
-			// }
+			}
 
 
 
@@ -217,11 +225,14 @@ public class SimpleFoldingOptimiser{
 
 	private void performComparator(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
 			InstructionHandle firstHandle = currentHandle.getPrev();
-			InstructionHandle secondHandle = currentHandle.getPrev().getPrev();	
+			InstructionHandle secondHandle = currentHandle.getPrev().getPrev();
+			boolean isLCMP = false;	
 
 			if (firstHandle.getInstruction() instanceof LCMP){
 				firstHandle = firstHandle.getPrev();
-				secondHandle = firstHandle.getPrev();
+				secondHandle = secondHandle.getPrev();
+
+				isLCMP = true;
 				
 				System.out.println("lcmp");
 				System.out.println(firstHandle);
@@ -231,10 +242,30 @@ public class SimpleFoldingOptimiser{
 				}catch(Exception e){
 
 				}
+
 			}
+
+		
 
 			Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
 			Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
+
+
+
+			if (isLCMP){
+				int value;
+				if ((Long) firstValue > (Long) secondValue) {
+					value = 1;
+				}else if ((Long) firstValue < (Long) secondValue) {
+					value = -1;
+				} else {
+					value = 0;
+				}	
+
+				firstValue = value;
+			}
+
+
 
 			String comparatorType = getOperationType(currentHandle, constantPoolGen);
 
@@ -260,7 +291,7 @@ public class SimpleFoldingOptimiser{
 					break;
 			}
 
-
+			System.out.println(result);
 			if (calculated){
 				foldIfInstruction(result, instructionList, currentHandle, constantPoolGen);
 			}
