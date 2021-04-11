@@ -171,19 +171,27 @@ public class SimpleFoldingOptimiser{
 
 	private void foldIfInstruction(boolean result, InstructionList instructionList, InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
 
+		IfInstruction currentInstruction = (IfInstruction) currentHandle.getInstruction();
+
+		// delete the previous 2 operands
 		try{
 			instructionList.delete(currentHandle.getPrev().getPrev());
 			instructionList.delete(currentHandle.getPrev());
-			instructionList.delete(currentHandle);
 		}catch(Exception e){
 
 		}
 
-
-
-
 		if (result){
-			
+
+		}else {
+			// result is false
+			// we delete everything from the comparison to its target.prev()
+
+			try {
+				instructionList.delete(currentHandle, currentInstruction.getTarget().getPrev());
+			}catch(Exception e){
+
+			}
 		}
 	}
 
