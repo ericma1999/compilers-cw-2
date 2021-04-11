@@ -20,11 +20,11 @@ public class ConstantVariableFolding
         return x > y;
     }
 
-    // public boolean methodFour(){
-    //     long x = 4835783423L;
-    //     long y = 400000;
-    //     long z = x + y;
-    //     return x > y;
-    // }
+    public boolean methodFour(){
+        long x = 4835783423L;
+        long y = 400000;
+        long z = x + y;
+        return x > y;
+    }
 
 }

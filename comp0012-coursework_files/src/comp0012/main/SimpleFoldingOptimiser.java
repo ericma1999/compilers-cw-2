@@ -183,6 +183,26 @@ public class SimpleFoldingOptimiser{
 
 		if (result){
 
+			// traverse through the instruction to the next goto, delete from goto to goto's target.getPrev()
+			// InstructionHandle gotoInstructionHandle = currentHandle; 
+			// while(true){
+			// 	if (gotoInstructionHandle.getInstruction() instanceof GotoInstruction){
+			// 		break;
+			// 	}else{
+			// 		gotoInstructionHandle = gotoInstructionHandle.getNext();
+			// 	}
+			// }
+
+			// InstructionHandle deleteTarget = ((GotoInstruction) gotoInstructionHandle.getInstruction()).getTarget().getPrev();
+
+			// try {
+			// 	instructionList.delete(gotoInstructionHandle, deleteTarget);
+			// }catch(Exception e){
+				
+			// }
+
+
+
 		}else {
 			// result is false
 			// we delete everything from the comparison to its target.prev()
@@ -198,6 +218,20 @@ public class SimpleFoldingOptimiser{
 	private void performComparator(InstructionHandle currentHandle, ConstantPoolGen constantPoolGen){
 			InstructionHandle firstHandle = currentHandle.getPrev();
 			InstructionHandle secondHandle = currentHandle.getPrev().getPrev();	
+
+			if (firstHandle.getInstruction() instanceof LCMP){
+				firstHandle = firstHandle.getPrev();
+				secondHandle = firstHandle.getPrev();
+				
+				System.out.println("lcmp");
+				System.out.println(firstHandle);
+				System.out.println(secondHandle);
+				try {
+					instructionList.delete(currentHandle.getPrev());
+				}catch(Exception e){
+
+				}
+			}
 
 			Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
 			Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
