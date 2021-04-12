@@ -12,6 +12,7 @@ import org.apache.bcel.classfile.Method;
 import org.apache.bcel.classfile.Constant;
 import org.apache.bcel.classfile.ConstantLong;
 import org.apache.bcel.generic.LoadInstruction;
+import org.apache.bcel.util.InstructionFinder;
 //import org.apache.bcel.generic.ClassGen;
 //import org.apache.bcel.generic.LCONST;
 //import org.apache.bcel.generic.RETURN;
@@ -35,6 +36,27 @@ public class SimpleFoldingOptimiser{
     }
 
     public InstructionList optimise(){
+
+		InstructionFinder f = new InstructionFinder(instructionList);
+		boolean hasLoop = false;
+
+		String pat = "GotoInstruction IINC";
+
+		// returns iterator where .nextElement will be instructionHandle[]
+		Iterator it = f.search(pat);
+
+		if (it != null){
+			hasLoop = true;
+		}
+
+		// InstructionHandle[] patternMatches = (InstructionHandle[]) it.next();
+
+		// if (patternMatches.length > 0){
+		// 	// we have a loop so don't fold the comparators
+		// 	hasLoop = true;
+		// }
+
+
         for(InstructionHandle instructionHandle: instructionList.getInstructionHandles()){
 			Instruction currentInstruction = instructionHandle.getInstruction();
 			InstructionHandle nextInstructionHandle = instructionHandle.getNext();
@@ -76,7 +98,7 @@ public class SimpleFoldingOptimiser{
 			// }
 
 
-			if (currentInstruction instanceof IfInstruction){
+			if (currentInstruction instanceof IfInstruction && !hasLoop){
 				// IfInstruction test = (IfInstruction) instructionHandle.getInstruction();
 				// System.out.println(test.getName());
 				System.out.println(getOperationType(instructionHandle, constantPoolGen));
