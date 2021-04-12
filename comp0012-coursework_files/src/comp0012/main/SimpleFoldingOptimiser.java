@@ -40,22 +40,13 @@ public class SimpleFoldingOptimiser{
 		InstructionFinder f = new InstructionFinder(instructionList);
 		boolean hasLoop = false;
 
-		String pat = "GotoInstruction IINC";
+		String pat = "IINC GotoInstruction";
 
 		// returns iterator where .nextElement will be instructionHandle[]
 		Iterator it = f.search(pat);
-
-		if (it != null){
+		if (it.hasNext()){
 			hasLoop = true;
 		}
-
-		// InstructionHandle[] patternMatches = (InstructionHandle[]) it.next();
-
-		// if (patternMatches.length > 0){
-		// 	// we have a loop so don't fold the comparators
-		// 	hasLoop = true;
-		// }
-
 
         for(InstructionHandle instructionHandle: instructionList.getInstructionHandles()){
 			Instruction currentInstruction = instructionHandle.getInstruction();
