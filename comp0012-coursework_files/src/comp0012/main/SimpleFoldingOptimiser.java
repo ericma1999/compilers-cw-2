@@ -56,39 +56,6 @@ public class SimpleFoldingOptimiser{
 
 			Number arithmeticResult = null;
 
-			// if (currentInstruction instanceof LCMP){
-
-			// 	InstructionHandle firstHandle = instructionHandle.getPrev();
-			// 	InstructionHandle secondHandle = instructionHandle.getPrev().getPrev();
-
-
-			// 	Number firstValue = getValueFromInstruction(firstHandle, constantPoolGen);
-			// 	Number secondValue = getValueFromInstruction(secondHandle, constantPoolGen);
-
-			// 	int valueToPush;
-			// 	if ((Long) firstValue > (Long) secondValue) {
-			// 		valueToPush = 1;
-			// 	}else if ((Long) firstValue > (Long) secondValue) {
-			// 		valueToPush = -1;
-			// 	} else {
-			// 		valueToPush = 0;
-			// 	}	
-
-			// 	instructionHandle.setInstruction(new LDC(constantPoolGen.addInteger(valueToPush)));
-
-			// 	try{
-			// 		instructionList.delete(firstHandle);
-			// 		instructionList.delete(secondHandle);
-			// 	}catch(Exception e){
-
-			// 	}
-
-
-
-
-			// }
-
-
 			if (currentInstruction instanceof IfInstruction && !hasLoop){
 				// IfInstruction test = (IfInstruction) instructionHandle.getInstruction();
 				// System.out.println(test.getName());
