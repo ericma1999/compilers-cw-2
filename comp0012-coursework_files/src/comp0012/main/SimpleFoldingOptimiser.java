@@ -92,6 +92,7 @@ public class SimpleFoldingOptimiser{
 				// skip conversion step since we can conver the value to our desired type
 				try{
 					instructionList.delete(currentInstruction);
+					instructionList.setPositions(true);
 				}catch (Exception e){
 
 				}
@@ -183,6 +184,7 @@ public class SimpleFoldingOptimiser{
 		try{
 			instructionList.delete(currentHandle.getPrev().getPrev());
 			instructionList.delete(currentHandle.getPrev());
+			instructionList.setPositions(true);
 		}catch(Exception e){
 
 		}
@@ -205,6 +207,7 @@ public class SimpleFoldingOptimiser{
 			try {
 				instructionList.delete(currentHandle);
 				instructionList.delete(gotoInstructionHandle, deleteTarget);
+				instructionList.setPositions(true);
 			}catch(Exception e){
 				
 			}
@@ -217,6 +220,7 @@ public class SimpleFoldingOptimiser{
 
 			try {
 				instructionList.delete(currentHandle, currentInstruction.getTarget().getPrev());
+				instructionList.setPositions(true);
 			}catch(Exception e){
 
 			}
@@ -239,6 +243,7 @@ public class SimpleFoldingOptimiser{
 				System.out.println(secondHandle);
 				try {
 					instructionList.delete(currentHandle.getPrev());
+					instructionList.setPositions(true);
 				}catch(Exception e){
 
 				}
@@ -462,6 +467,7 @@ public class SimpleFoldingOptimiser{
 			instructionList.delete(currentHandle.getPrev().getPrev());
 			instructionList.delete(currentHandle.getPrev());
 			instructionList.delete(currentHandle);
+			instructionList.setPositions(true);
 		}catch(TargetLostException e){
 
 		}
