@@ -35,6 +35,31 @@ public class Cleanup{
         this.constantPoolGen = constantPoolGen;
     }
 
+
+
+
+    private void deleteInstruction(InstructionList instructionList, InstructionHandle deleteHandle, InstructionHandle replacementHandle){
+
+        InstructionHandle toReplace = null;
+
+        if (replacementHandle != null){
+            toReplace = replacementHandle;
+        }
+
+
+        try {
+            instructionList.delete(deleteHandle);
+        }catch(TargetLostException e){
+            for (InstructionHandle target : e.getTargets()) {
+                for (InstructionTargeter targeter : target.getTargeters()) {
+                    targeter.updateTarget(target, toReplace);
+                }
+            }
+        }
+
+        instructionList.setPositions(true);
+    }
+
     public InstructionList optimise(){
 
         this.referenceDictionary = new HashMap();
@@ -53,41 +78,69 @@ public class Cleanup{
                 if (this.referenceDictionary.get(variableIndex) != null){
                     
                     InstructionHandle instructionHandleInDict = this.referenceDictionary.get(variableIndex);
+                    InstructionHandle replacement = instructionHandleInDict.getNext();
 
-                    try {
-                        instructionList.delete(instructionHandleInDict.getPrev());
-                        instructionList.delete(instructionHandleInDict);
-                    }catch(TargetLostException e){
+                    deleteInstruction(instructionList, instructionHandleInDict.getPrev(), replacement);
+                    deleteInstruction(instructionList, instructionHandleInDict, replacement);
 
-                    }
-                }else {
-                    this.referenceDictionary.put(variableIndex, instructionHandle);
+                    // try {
+                    //     instructionList.delete(instructionHandleInDict.getPrev());
+                        
+                    // }catch(TargetLostException e){
+
+                    // }
+
+
+                    // try {
+                    //     instructionList.delete(instructionHandleInDict);
+                    // }catch(TargetLostException e){
+
+                    // }
+
+                    instructionList.setPositions(true);
                 }
+                
+                    this.referenceDictionary.put(variableIndex, instructionHandle);
+                
+            }
+            
+            // if there is an iinc mean there's a loop so remove the thing from the hashmap without the instructionList
+            if (currentInstruction instanceof IINC){
+                int variableIndex = ((IINC) currentInstruction).getIndex();
+                this.referenceDictionary.remove(variableIndex);
             }
 
 
         }
 
         for (InstructionHandle leftOverHandle: this.referenceDictionary.values()){
-              try {
-                        System.out.println("DELETING");
-                        System.out.println(leftOverHandle.getPrev());
-                        instructionList.delete(leftOverHandle.getPrev());
-                    }catch(TargetLostException e){
 
-                    } 
+            InstructionHandle replacement = leftOverHandle.getNext();
 
-            try {
+            deleteInstruction(instructionList, leftOverHandle.getPrev(), replacement);
+            deleteInstruction(instructionList, leftOverHandle, replacement);
+              
+            //   try {
+            //             System.out.println("DELETING");
+            //             System.out.println(leftOverHandle.getPrev());
+            //             if (leftOverHandle.getPrev() != null){
+            //                  instructionList.delete(leftOverHandle.getPrev());
+            //             }  
+            //         }catch(TargetLostException e){
 
-                        System.out.println("DELETING Store");
-                        System.out.println(leftOverHandle);
+            //         } 
 
-                        instructionList.delete(leftOverHandle);
-            }catch (TargetLostException e){
+            // try {
+
+            //             System.out.println("DELETING Store");
+            //             System.out.println(leftOverHandle);
+
+            //             instructionList.delete(leftOverHandle);
+            // }catch (TargetLostException e){
                 
-            }
+            // }
 
-            instructionList.setPositions(true);
+            // instructionList.setPositions(true);
         }
 
 
