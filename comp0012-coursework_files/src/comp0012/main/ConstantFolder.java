@@ -74,7 +74,6 @@ public class ConstantFolder
 			System.out.println(methodList[i].getName());
 			optimiseMethod(cgen, methodList[i], constPoolGen);
 			// reset the constant dictionary
-			this.storeDictionary = new HashMap();
 
 			System.out.println();
 			System.out.println();

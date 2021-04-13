@@ -26,7 +26,7 @@ import java.util.HashMap;
 
 
 public class Cleanup{
-    HashMap <Integer, Number> storeDictionary = new HashMap();
+    HashMap <Integer, InstructionHandle> referenceDictionary = new HashMap();
     InstructionList instructionList;
     ConstantPoolGen constantPoolGen;
 
@@ -36,8 +36,63 @@ public class Cleanup{
     }
 
     public InstructionList optimise(){
+
+        this.referenceDictionary = new HashMap();
+
+
         for(InstructionHandle instructionHandle: instructionList.getInstructionHandles()){
+            Instruction currentInstruction = instructionHandle.getInstruction();
+
+            if (currentInstruction instanceof StoreInstruction){
+                // if the current instruction is store we know that the previous instruction handle must be result of some value
+                // when we delete we can just delete the store instruction and the previous handle
+                StoreInstruction storeInstruction = (StoreInstruction) currentInstruction;
+
+                int variableIndex = storeInstruction.getIndex();
+
+                if (this.referenceDictionary.get(variableIndex) != null){
+                    
+                    InstructionHandle instructionHandleInDict = this.referenceDictionary.get(variableIndex);
+
+                    try {
+                        instructionList.delete(instructionHandleInDict.getPrev());
+                        instructionList.delete(instructionHandleInDict);
+                    }catch(TargetLostException e){
+
+                    }
+                }else {
+                    this.referenceDictionary.put(variableIndex, instructionHandle);
+                }
+            }
+
+
         }
+
+        for (InstructionHandle leftOverHandle: this.referenceDictionary.values()){
+              try {
+                        System.out.println("DELETING");
+                        System.out.println(leftOverHandle.getPrev());
+                        instructionList.delete(leftOverHandle.getPrev());
+                    }catch(TargetLostException e){
+
+                    } 
+
+            try {
+
+                        System.out.println("DELETING Store");
+                        System.out.println(leftOverHandle);
+
+                        instructionList.delete(leftOverHandle);
+            }catch (TargetLostException e){
+                
+            }
+
+            instructionList.setPositions(true);
+        }
+
+
+
+
 		return instructionList;
     }
 }

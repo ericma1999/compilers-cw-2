@@ -36,7 +36,7 @@ public class SimpleFoldingOptimiser{
     }
 
     public InstructionList optimise(){
-
+		this.storeDictionary = new HashMap();
 		InstructionFinder f = new InstructionFinder(instructionList);
 		boolean hasLoop = false;
 
