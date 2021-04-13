@@ -30,30 +30,30 @@ public class DynamicVariableFoldingTest
         System.setOut(null);
     }
 
-    // @Test
-    // public void testMethodOne()
-    // {
-    //     assertEquals(1301, dvf.methodOne());
-    // }
+    @Test
+    public void testMethodOne()
+    {
+        assertEquals(1301, dvf.methodOne());
+    }
 
-    // @Test
-    // public void testMethodTwoOut()
-    // {
-    //     dvf.methodTwo();
-    //     assertEquals("true\n", outContent.toString());
-    // }
+    @Test
+    public void testMethodTwoOut()
+    {
+        dvf.methodTwo();
+        assertEquals("true\n", outContent.toString());
+    }
 
-    // @Test
-    // public void testMethodTwoReturn()
-    // {
-    //     assertEquals(true, dvf.methodTwo());
-    // }
+    @Test
+    public void testMethodTwoReturn()
+    {
+        assertEquals(true, dvf.methodTwo());
+    }
 
-    // @Test
-    // public void testMethodThree()
-    // {
-    //     assertEquals(84, dvf.methodThree());
-    // }
+    @Test
+    public void testMethodThree()
+    {
+        assertEquals(84, dvf.methodThree());
+    }
     
     @Test
     public void testMethodFour(){

@@ -53,7 +53,7 @@ public class ConstantFolder
 		InstructionList test = methodGen.getInstructionList(); 
 		// simpleFolding(test, constPoolGen);
 		new SimpleFoldingOptimiser(test, constPoolGen).optimise();
-		// new Cleanup(test, constPoolGen).optimise();
+		new Cleanup(test, constPoolGen).optimise();
 
 		cgen.replaceMethod(currentMethod, methodGen.getMethod());
 	}
