@@ -52,7 +52,7 @@ public class ConstantFolder
 		Code currentCode = currentMethod.getCode();
 		InstructionList test = methodGen.getInstructionList(); 
 		// simpleFolding(test, constPoolGen);
-		new SimpleFoldingOptimiser(test, constPoolGen).optimise();
+		new Optimiser(test, constPoolGen).optimise();
 		new Cleanup(test, constPoolGen).optimise();
 
 		cgen.replaceMethod(currentMethod, methodGen.getMethod());

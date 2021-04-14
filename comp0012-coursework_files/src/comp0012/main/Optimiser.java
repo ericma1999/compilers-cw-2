@@ -25,12 +25,12 @@ import org.apache.bcel.generic.TargetLostException;
 import java.util.HashMap;
 
 
-public class SimpleFoldingOptimiser{
+public class Optimiser{
     HashMap <Integer, Number> storeDictionary = new HashMap();
     InstructionList instructionList;
     ConstantPoolGen constantPoolGen;
 
-    public SimpleFoldingOptimiser(InstructionList instructionList, ConstantPoolGen constantPoolGen){
+    public Optimiser(InstructionList instructionList, ConstantPoolGen constantPoolGen){
         this.instructionList = instructionList;
         this.constantPoolGen = constantPoolGen;
     }
