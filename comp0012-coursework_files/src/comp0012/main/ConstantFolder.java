@@ -66,18 +66,29 @@ public class ConstantFolder
 
 		ConstantPoolGen constPoolGen = cgen.getConstantPool();
 
+		System.out.println(cgen.getClassName());
+		// do not need to optimise the optimise files
+		if (cgen.getClassName().equals("comp0012.main.Optimiser") || cgen.getClassName().equals("comp0012.main.Cleanup")){
+			 this.optimized = cgen.getJavaClass();
+			 return;
+		}
 
 
 		Method[] methodList = cgen.getMethods();
-		System.out.println(cgen.getClassName());
+		
+
 		for (int i = 0; i< methodList.length; i++) {
-			System.out.println(methodList[i].getName());
+			
+
 			optimiseMethod(cgen, methodList[i], constPoolGen);
 			// reset the constant dictionary
 
-			System.out.println();
-			System.out.println();
-			System.out.println();
+			
+
+			
+
+			
+
 
 			// MethodGen methodGen = new MethodGen(methodList[i], cgen.getClassName(), constPoolGen);
 			// System.out.println(cgen.getClassName() + " --------- " + methodList[i].getName());

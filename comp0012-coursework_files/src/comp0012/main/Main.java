@@ -38,7 +38,8 @@ public class Main extends SimpleFileVisitor<Path> {
     }
 
     public static void main(String args[]) throws IOException {
-	System.out.println("Running COMP207p courswork-2");
+	
+
         Main main = new Main();
         main.parseArguments(args);
         Files.walkFileTree(Paths.get(main.inputRoot), main);

@@ -59,7 +59,8 @@ public class Optimiser{
 			if (currentInstruction instanceof IfInstruction && !hasLoop){
 				// IfInstruction test = (IfInstruction) instructionHandle.getInstruction();
 				// System.out.println(test.getName());
-				System.out.println(getOperationType(instructionHandle, constantPoolGen));
+				
+
 
 				performComparator(instructionHandle, constantPoolGen);
 			}
@@ -94,7 +95,8 @@ public class Optimiser{
 				// InstructionHandle secondHandle = firstHandle.getPrev();
 
 				arithmeticResult = calculateArithmetic(instructionHandle, constantPoolGen, instructionList);
-				System.out.println(arithmeticResult);
+				
+
 				
 			}
 
@@ -218,9 +220,12 @@ public class Optimiser{
 
 				isLCMP = true;
 				
-				System.out.println("lcmp");
-				System.out.println(firstHandle);
-				System.out.println(secondHandle);
+				
+
+				
+
+				
+
 				try {
 					instructionList.delete(currentHandle.getPrev());
 					instructionList.setPositions(true);
@@ -276,7 +281,8 @@ public class Optimiser{
 					break;
 			}
 
-			System.out.println(result);
+			
+
 			if (calculated){
 				foldIfInstruction(result, instructionList, currentHandle, constantPoolGen);
 			}
